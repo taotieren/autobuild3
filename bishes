@@ -1,0 +1,5 @@
+#! /bin/bash
+for i in `cat bish-list`
+do
+bish-compiler/bish-compiler $i
+done
