@@ -1,0 +1,12 @@
+def qa() {
+	@(bool $ABQA);
+}
+def qa_die() {
+	@(abdie "QA Error: \$*");
+}
+def qa_inset(x) {
+	@(grep '^'"$x"'\$' $AB/sets/section >/dev/null);
+}
+def qa_clean() {
+	@(! \([ -e $PKGDIR/usr/local]\));
+}

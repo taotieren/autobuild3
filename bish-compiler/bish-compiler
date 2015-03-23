@@ -7,14 +7,23 @@ then
 	exit 1
 fi
 
-echo "#! /bin/bash" > $1
-chmod 755 $1
+if [ "`basename $1 | cut -d . -f 2-`" != "sh" ]
+then
+	echo "#! /bin/bash" > $1
+	chmod 755 $1
+else
+	cat /dev/null > $1
+	chmod 644 $1
+fi
 
 for i in $1.mbish/*
 do
 	if [ "`basename $i | cut -d . -f 2-`" = "bish" ]
 	then
 		bish $i >> $1
+	elif [ "`basename $i | cut -d . -f 2-`" = "bil" ]
+	then
+		bish -l $i >> $1
 	else
 		cat $i >> $1
 	fi
