@@ -1,31 +1,26 @@
 #! /bin/bash
 # bish & bash mix compiler
 
-if [ ! -d $1.mbish ]
+if [ ! -d "$1.mbish" ]
 then
 	echo "Cannot find the mbish directory" 1>&2
 	exit 1
 fi
 
-if [ "`basename $1 | cut -d . -f 2-`" != "sh" ]
+echo "#! /bin/bash" > $1
+
+if [[ "$1" != *.sh ]]
 then
-	echo "#! /bin/bash" > $1
-	chmod 755 $1
+	chmod 755 "$1"
 else
-	cat /dev/null > $1
-	chmod 644 $1
+	chmod 644 "$1"
 fi
 
-for i in $1.mbish/*
+for bishsrc in $1.mbish/*
 do
-	if [ "`basename $i | cut -d . -f 2-`" = "bish" ]
-	then
-		bish $i >> $1
-	elif [ "`basename $i | cut -d . -f 2-`" = "bil" ]
-	then
-		bish -l $i >> $1
-	else
-		cat $i >> $1
-	fi
+	case "$bishsrc" in
+		(*.bish)	bish "$bishsrc" >> $1;;
+		(*.bil)	bish -l "$bishsrc" >> $1;;
+		(*)	cat "$bishsrc" >> $1
+	esac
 done
-

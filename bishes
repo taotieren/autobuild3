@@ -1,5 +1,5 @@
 #! /bin/bash
-for i in `cat bish-list`
+for bish in `cat bish-list`
 do
-bish-compiler/bish-compiler $i
+	bish-compiler/bish-compiler "$bish"
 done
