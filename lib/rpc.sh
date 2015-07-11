@@ -1,6 +1,6 @@
 
 if [ "$CROSS" ]; then
-	if [ -d "/var/ab/cross-root/$CROSS" ]; then
+	if [ ! -f "/var/ab/cross-rpc/$CROSS" ]; then
 		RPC_CHROOT=true
 	fi
 else
