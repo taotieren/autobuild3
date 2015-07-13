@@ -2,10 +2,10 @@
 if [ "$CROSS" ]; then
 	if [ ! -f "/var/ab/cross-rpc/$CROSS" ]; then
 		RPC_CHROOT=true
+	else
+		RPC_CHROOT=false
+		source /var/ab/cross-rpc/$CROSS
 	fi
-else
-	RPC_CHROOT=false
-	source /var/ab/cross-rpc/$CROSS
 fi
 [ "$RPC_PORT" ] || RPC_PORT=22
 
