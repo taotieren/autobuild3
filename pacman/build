@@ -1,1 +1,21 @@
 
+#!/bin/bash
+
+PIF = "./PKGINFO"
+
+pacfield(){ echo -ne "$1 = "; shift; pm_depcom "$@"; echo; }
+pacpkgver(){ ((PKGEPOCH)) && echo -n $PKGEPOCH:; echo -n "$PKGVER"; ((PKGREL)) && echo "-$PKGREL"; }
+
+makepkginfo () {
+	echo "pkgname = $PKGNAME"
+	echo "pkg = $(pacpkgver)"
+	echo "pkgdesc = $PKGDES"
+	echo "packager = $MTER"
+	echo "size = $(du -s $PKGDIR | cut -f 1)"
+	#echo "arch = ${CROSS-$ARCH}"
+	[ "$PKGSEC" ] && echo "group = $PKGSEC"
+	pacfield depend $PKGDEP	
+}
+
+makepkginfo > $PIF
+bsdtar -f "${PKGNAME}_${PKGVER}-${PKGREL}_${DPKG_ARCH}.pkg.tar.xz" -cJ "$PKGDIR/" $PIF
