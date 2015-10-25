@@ -1,9 +1,12 @@
+#!/bin/bash
+##defines: First we need the defines
+##@copyright GPL-2.0+
 # TODO: we may have to split this file. PKG/SRCDIR defs should be in ab3.sh.
 export SRCDIR="$PWD"
 export PKGDIR="$PWD/abdist"
 
 # Autobuild settings
-recsr $AB/etc/autobuild/defaults/*
+. "$AB"/etc/autobuild/ab3_defcfg.sh
 
 abrequire arch
 . "$AB/arch/_common.sh"
@@ -32,8 +35,6 @@ fi
 # Programmable modules should be put here.
 arch_loadfile functions
 
-for i in `cat $AB/env_cfgs/*`; do
-	export $i
-done
+export `cat $AB/exportvars/*`
 
 export PYTHON=/usr/bin/python2

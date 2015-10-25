@@ -1,3 +1,6 @@
+#!/bin/bash
+##20-qtproj.sh: Builds qmake stuffs
+##@copyright GPL-2.0+
 abtryexe qmake || ablibret
 
 build_qtproj_probe(){

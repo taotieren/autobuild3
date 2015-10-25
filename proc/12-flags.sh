@@ -1,3 +1,7 @@
+#!/bin/bash
+##proc/flags: makes *FLAGS from arch/
+##@copyright GPL-2.0+
+
 ABCC="$(basename "$CC")"
 ABCC="${ABCC%%-*}"
 ABCC="${ABCC^^}"

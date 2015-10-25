@@ -1,4 +1,6 @@
-# Common archdef for all ab arches, unsettable so the flags can be erased.
+#!/bin/bash
+##arch/_common.sh: Common arch defs for all ab arches, defines-mutable.
+##@copyright GPL-2.0+
 AB_FLAGS_TYPES='_OPTI _ARCH _WEIRD '
 AB_FLAGS_FEATURES='LTO PERMISSIVE '
 # Naming, sadly. PORT_NOTICE!
@@ -13,7 +15,7 @@ ARCH_RPM[mipsn32el]=mips64el
 CFLAGS_COMMON='-pipe -Wno-error '
 CFLAGS_COMMON_OPTI='-fomit-frame-pointer -O2 '
 CFLAGS_COMMON_OPTI_LTO='-flto '
-CFLAGS_COMMON_DEBUG='-O '	# not that frequently used since autotools know it.
+CFLAGS_COMMON_DEBUG='-O0 '	# not that frequently used since autotools know it.
 CFLAGS_GCC_OPTI='-fira-loop-pressure -fira-hoist-pressure '
 CFLAGS_GCC_DEBUG='-Og '		# note: not enabled for clang
 CFLAGS_CLANG_OPTI_LTO='-O4 '

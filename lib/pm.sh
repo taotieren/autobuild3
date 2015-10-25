@@ -1,4 +1,6 @@
 #!/bin/bash
+##pm.sh: Shared PM Abstraction Functions
+##@copyright GPL-2.0+
 # The great common package manager library for everyone!
 # From the wisdom of the ancient, ab2.
 # Magic book: ab2:PAKMGR.md
@@ -52,5 +54,5 @@ pm_deparse(){
 pm_deflat(){ ABPM=dummy VER_NONE_ALL=1 VER_NONE=1 PM_ALT=0 PM_COMMA=' ' PM_DELIM=' ' pm_depcom "$@"; }
 # dumpver: dumps a dpkg-ab-lish verstring.
 pm_dumpver(){ ((PKGEPOCH)) && echo -n $PKGEPOCH:; echo -n $PKGVER; ((PKGREL)) && echo -n -$PKGREL; }
-. $AB/$ABMPM/lib.sh
+. "$AB"/pm/"$ABMPM"/lib.sh
 abtrycmd pm_{whoprov,getver,exists,repoupdate,repoinstall,chroot,getver,exists}

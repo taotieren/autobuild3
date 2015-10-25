@@ -1,3 +1,6 @@
+#!/bin/bash
+##qa.sh: QA scripts. Writing this as a library has to be a mistake.
+##@copyright GPL-2.0+
 qa(){
 	bool $ABQA
 }

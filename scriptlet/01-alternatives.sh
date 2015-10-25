@@ -1,3 +1,6 @@
+#!/bin/bash
+##alternatives: that update-alternatives stuff
+##@copyright CC0
 # a more precise one
 # addalt link name path prio
 addalt(){
