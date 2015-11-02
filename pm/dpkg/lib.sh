@@ -4,23 +4,28 @@
 abreqexe dpkg dpkg-deb dpkg-query apt-get
 
 pm_whoprov(){
+	rpc_exe \
 	dpkg-query --admindir=$PM_ROOT/var/lib/dpkg -S $1 2> /dev/null | cut -d: -f 1
 	# This just give a nice list of formatted dependencies.
 }
 
 pm_getver(){
+	rpc_exe \
 	dpkg-query --admindir=$PM_ROOT/var/lib/dpkg -f '${Version}' -W $1 2>/dev/null
 }
 
 pm_exists(){
+	rpc_exe \
 	dpkg $PM_ROOTPARAM -l "$@" | grep ^ii &>/dev/null
 }
 
 pm_repoupdate(){
+	rpc_exe \
 	apt-get update
 }
 
 pm_repoinstall(){
+	rpc_exe \
 	apt-get install "$@" --yes
 }
 pm_chroot(){

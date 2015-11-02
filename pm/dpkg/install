@@ -1,4 +1,6 @@
 #!/bin/bash
 # dpkg/install: Defines the install procedure for DPKG
 ##@copyright GPL-2.0+
-dpkg $PM_ROOTPARAM -i "${PKGNAME}_${PKGVER}-${PKGREL}_${DPKG_ARCH}.deb"
+rpc_cp ${PKGNAME}_${PKGVER}-${PKGREL}_${DPKG_ARCH}.deb /tmp/tmp.deb
+rpc_exe \
+dpkg $PM_ROOTPARAM -i /tmp/tmp.deb
