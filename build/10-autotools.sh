@@ -14,7 +14,7 @@ build_autotools_probe(){
 build_autotools_build() {
 	export ABSHADOW
 
-	if bool $RECONF
+	if bool "$RECONF"
 	then
 		[ -x bootstrap ] && ! [ -e autogen.sh ] && ln -s bootstrap autogen.sh
 		if [ ! -x "$configure" ] || [ -e .patch ]; then
@@ -30,7 +30,7 @@ build_autotools_build() {
 		fi
 	fi
 
-	if bool $ABSHADOW
+	if bool "$ABSHADOW"
 	then
 		rm -rf build
 		mkdir -p build || abdie "Failed creating \$SRCDIR/build"
@@ -43,13 +43,13 @@ build_autotools_build() {
 	fi
 
 	BUILD_START
-	$SRCDIR/${configure:=configure} $AUTOTOOLS_TARGET $AUTOTOOLS_DEF $AUTOTOOLS_AFTER | ablog
+	"$SRCDIR/${configure:=configure}" $AUTOTOOLS_TARGET $AUTOTOOLS_DEF $AUTOTOOLS_AFTER | ablog
 
 	BUILD_READY
 	make $ABMK $MAKE_AFTER | ablog
 
 	BUILD_FINAL
-	make install BUILDROOT=$PKGDIR DESTDIR=$PKGDIR $MAKE_AFTER | ablog || _ret=$?
+	make install "BUILDROOT=$PKGDIR" "DESTDIR=$PKGDIR" $MAKE_AFTER | ablog || _ret=$?
 
 	if bool $ABSHADOW
 	then
