@@ -4,6 +4,7 @@
 # TODO: we may have to split this file. PKG/SRCDIR defs should be in ab3.sh.
 export SRCDIR="$PWD"
 export PKGDIR="$PWD/abdist"
+export PYTHON=/usr/bin/python2
 
 # Autobuild settings
 . "$AB"/etc/autobuild/ab3_defcfg.sh
@@ -39,6 +40,3 @@ fi
 # Programmable modules should be put here.
 arch_loadfile functions
 
-export `cat $AB/exportvars/*`
-
-export PYTHON=/usr/bin/python2
