@@ -4,7 +4,7 @@
 # dpkg field helper.
 _ab_pm_func+='dpkgfield dpkgpkgver dpkgctrl '
 dpkgfield(){ echo -ne "$1: "; shift; pm_depcom "$@"; echo; }
-dpkgpkgver(){ ((PKGEPOCH)) && echo -n $PKGEPOCH:; echo -n "$PKGVER"; ((PKGREL)) && echo "-$PKGREL"; }
+dpkgpkgver(){ ((PKGEPOCH)) && echo -n "$PKGEPOCH":; echo -n "$PKGVER"; ((PKGREL)) && echo "-$PKGREL"; }
 
 dpkgctrl(){
 	local arch=$ABHOST
@@ -14,43 +14,40 @@ dpkgctrl(){
 	echo "Architecture: $arch"
 	[ "$PKGSEC" ] && echo "Section: $PKGSEC"
 	echo "Maintainer: $MTER"
-	echo "Installed-Size: $(du -s $PKGDIR | cut -f 1)"
+	echo "Installed-Size: $instSIZE"
 	echo "Description: $PKGDES"
-	dpkgfield Depends $PKGDEP
+	dpkgfield Depends "${PKGDEP[@]}"
 	VER_NONE=1 # We don't autofill versions in optional fields
-	[ "$PKGRECOM" ] && dpkgfield Recommends $PKGRECOM
-	[ "$PKGREP" ] && dpkgfield Replaces $PKGREP
-	[ "$PKGCONFL" ] && dpkgfield Conflicts $PKGCONFL
-	[ "$PKGPROV" ] && VER_NONE=1 dpkgfield Provides $PKGPROV
-	[ "$PKGSUG" ] && dpkgfield Suggests $PKGSUG
-	[ "$PKGBREAK" ] && dpkgfield Breaks $PKGBREAK
+	# these checks are surprisingly still good for arrays...
+	[ "$PKGRECOM" ] && dpkgfield Recommends "${PKGRECOM[@]}"
+	[ "$PKGREP" ] && dpkgfield Replaces "${PKGREP[@]}"
+	[ "$PKGCONFL" ] && dpkgfield Conflicts "${PKGCONFL[@]}"
+	[ "$PKGPROV" ] && VER_NONE=1 dpkgfield Provides "${PKGPROV[@]}"
+	[ "$PKGSUG" ] && dpkgfield Suggests "${PKGSUG[@]}"
+	[ "$PKGBREAK" ] && dpkgfield Breaks "${PKGBREAK[@]}"
 	echo "$DPKGXTRACTRL"
 }
 
+instSIZE=$(du -s "$PKGDIR" | cut -f 1)
 # Auto-select xz level, += preserves the possiblility of extra things
-dpkgflagsel(){
-	if ((instSIZE >= 8386000)); then
-		if ((instSIZE < 16775000)); then
-			DPKGDEBCOMP+="-z7"
-		else 
-			if ((instSIZE < 33552000)); then
-				DPKGDEBCOMP+="-z8"
-			else DPKGDEBCOMP+="-z9"
-			fi
-		fi
-	else
-		DPKGDEBCOMP+="-z6"
-	fi
-}
+if [[ " ${DPKGDEBCOMP[*]" == *' '-z* ]]; then
+	: nop
+elif ((instSIZE < 8380000)); then
+	DPKGDEBCOMP+=("-z6")
+elif ((instSIZE < 16775000)); then
+	DPKGDEBCOMP+=("-z7")
+elif ((instSIZE < 33552000)); then
+	DPKGDEBCOMP+=("-z8")
+else
+	DPKGDEBCOMP+=("-z9")
+fi
 
-instSIZE=$(du -s abdist | cut -f 1)
-[[ "$DPKGDEBCOMP" == "*-z*" ]] || dpkgflagsel
 
-mkdir -p $PKGDIR/DEBIAN
-cp -rl $SRCDIR/abscripts/* $PKGDIR/DEBIAN
-cp -l $SRCDIR/autobuild/conffiles $PKGDIR/DEBIAN 2>/dev/null
-dpkgctrl > $PKGDIR/DEBIAN/control &&
-dpkg-deb -Zxz $DPKGDEBCOMP -Sextreme -b $PKGDIR ${PKGNAME}_${PKGVER}-${PKGREL}_${ABHOST}.deb || return $?
-mv $PKGDIR/DEBIAN $SRCDIR/ab-dpkg
+mkdir -p "$PKGDIR/DEBIAN"
+cp -rl "$SRCDIR"/abscripts/* "$PKGDIR"/DEBIAN
+cp -l "$SRCDIR"/autobuild/conffiles "$PKGDIR"/DEBIAN 2>/dev/null
+dpkgctrl > "$PKGDIR"/DEBIAN/control &&
+dpkg-deb -Zxz "${DPKGDEBCOMP[@]}" -Sextreme -b "$PKGDIR" "${PKGNAME}_${PKGVER}-${PKGREL}_${ABHOST}.deb" || return $?
+mv "$PKGDIR"/DEBIAN "$SRCDIR"/ab-dpkg
 
-export ABPACKAGE+="${PKGNAME}_${PKGVER}-${PKGREL}_${ABHOST}.deb "
+ABPACKAGE+=("${PKGNAME}_${PKGVER}-${PKGREL}_${ABHOST}.deb ")
