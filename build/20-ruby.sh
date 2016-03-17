@@ -13,4 +13,4 @@ build_ruby_build(){
 	rm -f -- "$PKGDIR/$GEMDIR/cache/$PKGNAME-$PKGVER.gem"
 }
 
-ABBUILDS+=' ruby'
+ABBUILDS+=('ruby')

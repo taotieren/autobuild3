@@ -11,8 +11,8 @@ build_perl_build(){
 	BUILD_START
 	yes | perl Makefile.PL
 	BUILD_READY
-	yes | make $MAKE_AFTER
+	yes | make "${MAKE_AFTER[@]}" "${MAKEFLAGS[@]}"
 	BUILD_FINAL
 	make DESTDIR="$PKGDIR" install
 }
-ABBUILDS+=' perl'
+ABBUILDS+=('perl')

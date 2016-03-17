@@ -39,17 +39,18 @@ build_autotools_build() {
 
 	if [[ $HOST ]]
 	then
-		AUTOTOOLS_TARGET="--host=$HOST"
+		# arch:todo: can we just keep sticking it there?
+		AUTOTOOLS_TARGET=("--host=$HOST")
 	fi
 
 	BUILD_START
-	"$SRCDIR/${configure:=configure}" $AUTOTOOLS_TARGET $AUTOTOOLS_DEF $AUTOTOOLS_AFTER | ablog
+	"$SRCDIR/${configure:=configure}" "${AUTOTOOLS_TARGET[@]}" "${AUTOTOOLS_DEF[@]}" "${AUTOTOOLS_AFTER[@]}" | ablog
 
 	BUILD_READY
-	make $ABMK $MAKE_AFTER | ablog
+	make "${ABMK[@]}" "${MAKE_AFTER[@]}" | ablog
 
 	BUILD_FINAL
-	make install "BUILDROOT=$PKGDIR" "DESTDIR=$PKGDIR" $MAKE_AFTER | ablog || _ret=$?
+	make install "BUILDROOT=$PKGDIR" "DESTDIR=$PKGDIR" "${MAKE_AFTER[@]}" | ablog || _ret=$PIPESTATUS
 
 	if bool $ABSHADOW
 	then
@@ -58,4 +59,4 @@ build_autotools_build() {
 	return $_ret
 }
 
-ABBUILDS+=' autotools'
+ABBUILDS+=('autotools')
