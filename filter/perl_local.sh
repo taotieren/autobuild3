@@ -6,4 +6,4 @@ filter_perllocal(){
 	rm -f "$PKGDIR"/usr/lib/perl5/**/perllocal.pod
 }
 
-export ABFILTERS="$ABFILTERS perllocal"
+ABFILTERS+=("perllocal")
