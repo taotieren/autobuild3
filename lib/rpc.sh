@@ -27,10 +27,10 @@ rpc_cp(){
 
 rpc_exe(){
 	if ! [ "$CROSS" ]; then
-		eval "$1"
+		( eval "$1" )
 	elif bool $RPC_CHROOT; then
-		chroot /var/ab/cross-root/$CROSS bash -c "$1"
+		chroot /var/ab/cross-root/"$CROSS"   bash -c "$1"
 	else
-		ssh -tt -p $RPC_PORT $RPC_SERVER bash -c "$1"
+		ssh -tt -p "$RPC_PORT" "$RPC_SERVER" bash -c "$1"
 	fi
 }
