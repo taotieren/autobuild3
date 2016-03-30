@@ -1,4 +1,7 @@
-
+#!/bin/bash
+##rpc.sh: remote-or-local commands.
+##@copyright GPL-2.0+
+# todo: rebase 'data', screw bool
 if [ "$CROSS" ]; then
 	if [ ! -f "/var/ab/cross-rpc/$CROSS" ]; then
 		RPC_CHROOT=true
@@ -9,21 +12,25 @@ if [ "$CROSS" ]; then
 fi
 [ "$RPC_PORT" ] || RPC_PORT=22
 
+# todo: use cp-l
 rpc_cp(){
+	(($# < 2)) || return 42
 	if ! [ "$CROSS" ]; then
-		cp $1 $2
+		cp -a "$@"
 	elif bool $RPC_CHROOT; then
-		cp $1 /var/ab/cross-root/$CROSS/$2
+		#      argv[:-1]                                argv[-1]
+		cp -a "${@:1:$#-1}" "/var/ab/cross-root/$CROSS/${@:$#:1}"
 	else
-		scp -P $RPC_PORT $1 $RPC_SERVER:$2
+		scp -pr -P "$RPC_PORT" "${@:1:$#-1}" "$RPC_SERVER":"${@:$#:1}"
 	fi
 }
+
 rpc_exe(){
 	if ! [ "$CROSS" ]; then
-		eval "$*"
+		eval "$1"
 	elif bool $RPC_CHROOT; then
-		chroot /var/ab/cross-root/$CROSS $*
+		chroot /var/ab/cross-root/$CROSS bash -c "$1"
 	else
-		ssh -p $RPC_PORT $RPC_SERVER $*
+		ssh -tt -p $RPC_PORT $RPC_SERVER bash -c "$1"
 	fi
 }
