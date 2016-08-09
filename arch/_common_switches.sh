@@ -7,3 +7,7 @@ if ((AB_FLAGS_SSP)); then CFLAGS_COMMON+='-fstack-protector-strong --param=ssp-b
 if ((AB_FLAGS_RRO)); then LDFLAGS_COMMON+='-Wl,-z,relro '; fi
 if ((AB_FLAGS_NOW)); then LDFLAGS_COMMON+='-Wl,-z,now '; fi
 if ((AB_FLAGS_FTF)); then CPPFLAGS_COMMON+='-D_FORTIFY_SOURCE=2 '; fi
+
+if ((AB_SAN_ADD)); then CFLAGS_COMMON+='-fsanitize=address '
+if ((AB_SAN_THR)); then CFLAGS_COMMON+='-fsanitize=thread '
+if ((AB_SAN_LEK)); then CFLAGS_COMMON+='-fsanitize=leak '

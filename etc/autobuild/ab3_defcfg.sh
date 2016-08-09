@@ -29,6 +29,10 @@ AB_FLAGS_RRO=1
 AB_FLAGS_NOW=1
 AB_FLAGS_FTF=1
 
+AB_SAN_ADD=0
+AB_SAN_THR=0
+AB_SAN_LEK=0
+
 ##OS Directory Tree
 # Built-in variables for OS3 directory tree.
 # Will be updated. Therefore not part of conffiles.
